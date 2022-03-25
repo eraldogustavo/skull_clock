@@ -2,13 +2,63 @@
 
 <h1>Clocks</h1>
 
-<div id="clocks">
-  <% @clocks.each do |clock| %>
-    <%= render clock %>
-    <p>
-      <%= link_to "Show this clock", clock %>
-    </p>
+<div id="clocks" class="container">
+
+  <%= button_to(
+    'Clock in',
+    clocks_path,
+    disabled: @clocks.where(stop_time: nil).present?,
+    method: :post,
+    params: { clock: {
+        user_id: current_user.id, 
+        label: 'Default label',
+        start_time: Time.now,
+        stop_time: nil,
+    }}) %>
+
+  <% if @clocks.present? %>
+    <div class="row justify-content-center">
+      <table class="table table-bordered">
+        <thead>
+          <tr>
+            <th scope="col">Clock label</th>
+            <th scope="col">Clock in time</th>
+            <th scope="col">Clock out time</th>
+            <th scope="col">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @clocks.each do |clock| %>
+            <tr>
+              <td> <%= clock.label %> </td>
+              <td> <%= clock.start_time %> </td>
+              <td> 
+                <% if clock.stop_time.present? %>
+                  <%= clock.stop_time %>
+                <% else %>
+                  You have not left yet
+                <% end %> 
+              </td>
+              <td>
+                <%= button_to(
+                  'View', 
+                  clock_path(clock),
+                  method: :get
+                ) %>
+
+                <%= button_to(
+                  'Clock out', 
+                  clock_path(clock),
+                  disabled: clock.stop_time != nil,
+                  method: :patch,
+                  params: { clock: { 
+                  stop_time: Time.now,
+                }}) %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
   <% end %>
 </div>
-
-<%= link_to "New clock", new_clock_path %>

@@ -5,6 +5,7 @@ class ClocksController < ApplicationController
   # GET /clocks
   def index
     @clocks = Clock.all
+    @clocks = @clocks.where(user_id: current_user.id)
   end
 
   # GET /clocks/1
@@ -49,11 +50,15 @@ class ClocksController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_clock
-      @clock = Clock.find(params[:id])
+      # @clock = Clock.find(params[:id])
+      @clock = Clock.where("user_id = ? AND id = ?", current_user.id, params[:id]).first
+
+      rescue ActiveRecord::RecordNotFound => e
+        redirect_to clocks_path, notice: "Clock not found!"
     end
 
     # Only allow a list of trusted parameters through.
     def clock_params
-      params.fetch(:clock, {})
+      params.require(:clock).permit(:user_id, :start_time, :stop_time, :label)
     end
 end

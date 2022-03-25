@@ -33,4 +33,5 @@ ActiveRecord::Schema[7.0].define(version: 2022_03_23_152642) do
   end
 
   add_foreign_key "clocks", "users"
+  add_foreign_key "clocks", "users"
 end
