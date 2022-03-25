@@ -1,6 +1,9 @@
 Rails.application.routes.draw do
+  post 'clock_history', to: 'clock_history#create'
+
+  get 'clock_history/new'
   get 'clocks/export', to: 'clocks#export'
-  
+
   resources :clocks
   devise_for :users
 

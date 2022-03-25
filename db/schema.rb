@@ -10,7 +10,17 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_03_23_152642) do
+ActiveRecord::Schema[7.0].define(version: 2022_03_25_023932) do
+  create_table "clock_histories", force: :cascade do |t|
+    t.integer "clock_id"
+    t.datetime "start_time"
+    t.datetime "stop_time"
+    t.string "action_type"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["clock_id"], name: "index_clock_histories_on_clock_id"
+  end
+
   create_table "clocks", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -32,6 +42,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_03_23_152642) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  add_foreign_key "clock_histories", "clocks"
   add_foreign_key "clocks", "users"
   add_foreign_key "clocks", "users"
 end
