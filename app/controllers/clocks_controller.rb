@@ -1,3 +1,5 @@
+require 'csv'
+
 class ClocksController < ApplicationController
   before_action :authenticate_user!
   before_action :set_clock, only: %i[ show edit update destroy ]
@@ -45,6 +47,19 @@ class ClocksController < ApplicationController
   def destroy
     @clock.destroy
     redirect_to clocks_url, notice: "Clock was successfully destroyed."
+  end
+
+   # EXPORT
+  def export
+    @clocks = Clock.all
+    @clocks = @clocks.where(user_id: current_user.id)
+
+    respond_to do |format|
+      format.csv do
+        response.headers["Content-Type"] = 'text/csv'
+        response.headers["Content-Disposition"] = 'attachment; filename=clock_history.csv'
+      end
+    end
   end
 
   private

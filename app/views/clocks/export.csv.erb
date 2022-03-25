@@ -1,0 +1,5 @@
+<%- headers = ['Label', 'Start time', 'Stop time'] -%>
+<%= CSV.generate_line headers %>
+<%- @clocks.each do |clock| -%>
+  <%= CSV.generate_line([clock.label, clock.start_time, clock.stop_time]) -%>
+<%- end -%>
