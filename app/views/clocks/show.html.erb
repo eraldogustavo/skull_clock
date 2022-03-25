@@ -28,13 +28,18 @@
                 <% end %>
               </td>
             </tr>
+             <tr>
+              <th>Deleted at:</th>
+              <td> <%= @clock.deleted_at %> </td>
+            </tr>
           </tbody>
         </table>
       </div>
     </div>
 
     <%= link_to "Edit this clock", edit_clock_path(@clock) %> |
-    <%= button_to "Destroy this clock", @clock, method: :delete %>
+    <%= button_to "Destroy this clock", @clock, method: :patch, params: {clock: { deleted_at: Time.now}} %>
+
   <% else %>
     <p>Clock not found</p>
   <% end %>

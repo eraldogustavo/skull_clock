@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_03_25_023932) do
+ActiveRecord::Schema[7.0].define(version: 2022_03_25_104459) do
   create_table "clock_histories", force: :cascade do |t|
     t.integer "clock_id"
     t.datetime "start_time"
@@ -18,6 +18,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_03_25_023932) do
     t.string "action_type"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.datetime "deleted_at"
     t.index ["clock_id"], name: "index_clock_histories_on_clock_id"
   end
 
@@ -28,6 +29,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_03_25_023932) do
     t.string "label"
     t.datetime "start_time"
     t.datetime "stop_time"
+    t.datetime "deleted_at"
   end
 
   create_table "users", force: :cascade do |t|

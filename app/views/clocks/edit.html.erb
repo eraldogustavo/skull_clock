@@ -28,6 +28,14 @@
           </div>
         <% end %>
       </div>  
+
+      <%= started_at = 2.days.ago 
+          time_diff = (@clock.stop_time - @clock.start_time)
+          (time_diff / 1.minute).round > 5
+      %>
+
+      <%= @clock.start_time.to_i < Time.now.to_i %>
+
     <% else %>
       <p>No clock found</p>
     <% end %>

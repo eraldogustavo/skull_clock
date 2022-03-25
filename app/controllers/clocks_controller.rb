@@ -7,7 +7,9 @@ class ClocksController < ApplicationController
   # GET /clocks
   def index
     @clocks = Clock.all
-    @clocks = @clocks.where(user_id: current_user.id)
+    # @clocks = @clocks.where(user_id: current_user.id)
+    @clocks = @clocks.where(user_id: current_user.id, deleted_at: nil)
+    # @clocks = Clock.where("user_id = ? AND id = ?", current_user.id, params[:id]).all
   end
 
   # GET /clocks/1
@@ -36,8 +38,14 @@ class ClocksController < ApplicationController
 
   # PATCH/PUT /clocks/1
   def update
+    message = "Clock was successfully updated."
+    
+    if params[:deleted_at] != nil
+      message = "Clock was successfully destroyed." 
+    end
+
     if @clock.update(clock_params)
-      redirect_to @clock, notice: "Clock was successfully updated."
+      redirect_to @clock, notice: message
     else
       render :edit, status: :unprocessable_entity
     end
@@ -52,7 +60,7 @@ class ClocksController < ApplicationController
    # EXPORT
   def export
     @clocks = Clock.all
-    @clocks = @clocks.where(user_id: current_user.id)
+    @clocks = @clocks.where(user_id: current_user.id, deleted_at: nil)
 
     respond_to do |format|
       format.csv do
@@ -65,7 +73,6 @@ class ClocksController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_clock
-      # @clock = Clock.find(params[:id])
       @clock = Clock.where("user_id = ? AND id = ?", current_user.id, params[:id]).first
 
       rescue ActiveRecord::RecordNotFound => e
@@ -74,6 +81,7 @@ class ClocksController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def clock_params
-      params.require(:clock).permit(:user_id, :start_time, :stop_time, :label)
+      params.require(:clock).permit(:user_id, :start_time, :stop_time, :label, :deleted_at)
     end
+
 end
