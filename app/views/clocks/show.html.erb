@@ -1,10 +1,43 @@
 <p style="color: green"><%= notice %></p>
 
-<%= render @clock %>
-
 <div>
-  <%= link_to "Edit this clock", edit_clock_path(@clock) %> |
-  <%= link_to "Back to clocks", clocks_path %>
+  <% if @clock.present? %>
 
-  <%= button_to "Destroy this clock", @clock, method: :delete %>
+    <div class="container">
+      <div class="row justify-content-center">
+        <h4 class="mt-4 mb-4 display-4">Show details of clock <%= @clock.label %> </h4>
+      </div>
+      <div class="row justify-content-center">
+        <table class="table">
+          <tbody>
+            <tr>
+              <th>Label:</th>
+              <td> <%= @clock.label %> </td>
+            </tr>
+            <tr>
+              <th>Start time:</th>
+              <td> <%= @clock.start_time %> </td>
+            </tr>
+            <tr>
+              <th>Stop time:</th>
+              <td> 
+                <% if @clock.stop_time.present? %>
+                  <%= @clock.stop_time%>
+                <% else %>
+                  <p> Still tracking time </p>
+                <% end %>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <%= link_to "Edit this clock", edit_clock_path(@clock) %> |
+    <%= button_to "Destroy this clock", @clock, method: :delete %>
+  <% else %>
+    <p>Clock not found</p>
+  <% end %>
+
+  <%= link_to "Back to clocks", clocks_path %>
 </div>
